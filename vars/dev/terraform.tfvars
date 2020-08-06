@@ -1,7 +1,7 @@
-aws_region = "ap-south-1"
+aws_region = "us-east-1"
 instance_type = "t2.micro"
-ami_id = "ami-0732b62d310b80e97"
-ec2_key = "ektest"
-subnet_id = "subnet-bb90ddd3"
-vpc_security_group_ids  = ["sg-204d484a"]
+ami_id = "ami-02354e95b39ca8dec"
+ec2_key = "raj"
+subnet_id = "subnet-8a9d99b4"
+vpc_security_group_ids  = ["sg-49b0c868"]
 account_role_arn = ""
