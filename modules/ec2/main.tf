@@ -9,7 +9,7 @@ resource "aws_instance" "ec2" {
           sudo apt-get -y update
           sudo apt-get -y install nginx
           sudo service nginx start
-          echo "<h1>Deployed via Terraform</h1>" | sudo tee /var/www/html/index.html
+          echo "<h1>Deployed via Terraform</h1>" >> sudo tee /var/www/html/index.html
   EOF
 }
 
