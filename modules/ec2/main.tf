@@ -31,7 +31,7 @@ resource "aws_autoscaling_group" "web_asg" {
   availability_zones = [data.aws_availability_zones.all.names]
   min_size = 2
   max_size = 3
-  load_balancers = aws_elb.example.name
+  load_balancers = aws_lb.web-lb.name
   health_check_type = "ELB"
   tag {
     key = "Name"
@@ -46,7 +46,6 @@ resource "aws_lb_target_group" "web_80" {
   port     = "80"
   protocol = "TCP"
   vpc_id   = "vpc-cb6d61b1"
-  tags     = var.tags
 
   health_check {
     interval            = "30"

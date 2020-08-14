@@ -1,3 +1,3 @@
 output "eld_dns" {
-  value = aws_elb.example.dns_name
+  value = aws_lb.web-lb.dns_name
 }
