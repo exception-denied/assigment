@@ -41,21 +41,41 @@ resource "aws_autoscaling_group" "web_asg" {
 }
 
 
-resource "aws_elb" "example" {
-  name = "terraform-asg-example"
-  security_groups = var.vpc_security_group_ids
-  availability_zones = [data.aws_availability_zones.all.names]
+resource "aws_lb_target_group" "web_80" {
+  name     = "web-tg-80"
+  port     = "80"
+  protocol = "TCP"
+  vpc_id   = "vpc-cb6d61b1"
+  tags     = var.tags
+
   health_check {
-    healthy_threshold = 2
-    unhealthy_threshold = 2
-    timeout = 3
-    interval = 30
-    target = "HTTP:80/"
+    interval            = "30"
+    protocol            = "TCP"
+    healthy_threshold   = "3"
+    unhealthy_threshold = "3"
+    port                = "80"
   }
-  listener {
-    lb_port = 80
-    lb_protocol = "http"
-    instance_port = "80"
-    instance_protocol = "http"
+}
+
+resource "aws_autoscaling_attachment" "web_a80" {
+  autoscaling_group_name = aws_autoscaling_group.web_asg.id
+  alb_target_group_arn   = aws_lb_target_group.web_80.arn
+}
+
+resource "aws_lb" "web-lb" {
+  name               = "web-lb"
+  internal           = false
+  load_balancer_type = "application"
+  subnets            = var.lb_subnets
+}
+
+resource "aws_lb_listener" "web_l80" {
+  load_balancer_arn = aws_lb.web-lb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.web_80.arn
   }
 }
