@@ -1,3 +1,3 @@
-output "ec2_id" {
-  value = aws_instance.ec2.id
+output "eld_dns" {
+  value = aws_elb.example.dns_name
 }
