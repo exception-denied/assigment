@@ -11,8 +11,6 @@ EOF
 
 
 
-data "aws_availability_zones" "all" {}
-
 
 resource "aws_launch_configuration" "web_server" {
   image_id               = var.ami_id
@@ -26,18 +24,22 @@ resource "aws_launch_configuration" "web_server" {
 }
 
 
+
 resource "aws_autoscaling_group" "web_asg" {
-  launch_configuration = aws_launch_configuration.web_server.id
-  availability_zones = [data.aws_availability_zones.all.names]
-  min_size = 2
-  max_size = 3
-  load_balancers = aws_lb.web-lb.name
-  health_check_type = "ELB"
-  tag {
-    key = "Name"
-    value = "terraform-asg-example"
-    propagate_at_launch = true
+  name = "web-asg"
+
+  vpc_zone_identifier       = var.lb_subnets
+  launch_configuration      = aws_launch_configuration.web_server.name
+  health_check_type         = "EC2"
+  min_size                  = 2
+  max_size                  = 3
+  desired_capacity          = 2
+  wait_for_capacity_timeout = 0
+
+  lifecycle {
+    create_before_destroy = true
   }
+
 }
 
 
