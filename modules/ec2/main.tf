@@ -46,12 +46,12 @@ resource "aws_autoscaling_group" "web_asg" {
 resource "aws_lb_target_group" "web_80" {
   name     = "web-tg-80"
   port     = "80"
-  protocol = "TCP"
+  protocol = "HTTP"
   vpc_id   = "vpc-cb6d61b1"
 
   health_check {
     interval            = "30"
-    protocol            = "TCP"
+    protocol            = "HTTP"
     healthy_threshold   = "3"
     unhealthy_threshold = "3"
     port                = "80"
